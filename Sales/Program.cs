@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using GreenPipes;
 using MassTransit;
 
 namespace Sales
@@ -33,6 +34,8 @@ namespace Sales
                 cfg.ReceiveEndpoint(host, "RetailDemo.MassTransit.Sales", e =>
                 {
                     e.Consumer<PlaceOrderHandler>();
+
+                    e.UseRetry(retryConfig => { retryConfig.Interval(5, TimeSpan.FromSeconds(2)); });
                 });
             });
         }
